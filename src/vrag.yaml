@@ -1,0 +1,52 @@
+
+# Settings for LLM model
+  llm_name: 'lama'
+  llm_path: './models/Llama-3.2-3B-Instruct'
+  llm_device: 'mps'
+  llm_system_prompt: 'You are a helpful assistant.'
+  
+  #llm_template: """Use the following pieces of context to answer the question. If no context provided, answer like a AI assistant.{context}Question: {question}"""
+
+# Settings for vector store
+  vs_embeddings_model_name: 'all-mpnet-base-v2'
+  vs_embeddings_model_path: './models/sentence-transformers/all-mpnet-base-v2'
+  vs_pdf_documents_folder: './documents'
+  vs_output_folder: './vectorstore/database'
+  vs_chunk_size: 1000
+  vs_chunk_overlap: 50
+
+#Settings for wake word detection
+  ww_model_path: 'models/MIT-ast-finetuned-speech-commands-v2'
+  ww_model_device: 'mps'
+  ww_wake_word: 'seven'
+  ww_prob_threshold: 0.5
+  ww_chunk_length: 2.0
+  ww_stream_chunk: 0.25
+  ww_debug: False
+
+#Settings for auotmatic speech recognition
+  asr_model_path: './models/whisper-base'
+  asr_model_device: 'mps'
+  asr_chunk_length: 5.0
+  asr_stream_chunk_s: 1.0
+  asr_max_new_tokens: 128
+
+#Settings for Retrieval Augmented Generation
+  rag_top_k: 10
+  rag_top_p: 0.9
+  rag_repition_penalty: 1
+  rag_streaming: True
+  rag_temperature: 0.1
+  rag_max_new_tokens: 200
+  rag_do_sample: True 
+  rag_retriever_documents: 7
+  rag_debug: False
+
+#Settings for Text to Speech Model
+  tts_model_path: './models/SpeechT5'
+  tts_hifigan_path: './models/SpeechT5HiFiGAN'
+  tts_speaker_embeddings: './models/SpeechT5/speaker1.pt'
+  tts_sampling_rate: 16000
+  tts_word_per_utterance: 10
+
+
