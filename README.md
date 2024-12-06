@@ -21,6 +21,10 @@ Follow the following steps to run the app.
 14. Now Ask question by Saying the word 'SEVEN' followed by your question.
 15. As an example if your PDF documents are about financial metrics and have some information on IRR, the question could be asked by speaking in the mic 'SEVEN what is meant by internal rate of return'.
 
+Following is the architecture of the pipeline
+![VRAG Architecture](architecture.png)
+
+
 ## References ##
 1) https://huggingface.co/learn/audio-course/en/chapter7/voice-assistant
 
