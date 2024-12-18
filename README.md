@@ -24,6 +24,11 @@ Follow the following steps to run the app.
 Following is the architecture of the pipeline
 ![VRAG Architecture](architecture.png)
 
+## Strengths ##
+1. Can be setup in less than 15 minutes
+2. Completely Offline
+3. Can be used with different LLMs
+4. Allows users to experiment with the quality of responses by changing the parameters in a single configuration file
 
 ## References ##
 1) https://huggingface.co/learn/audio-course/en/chapter7/voice-assistant
