@@ -1,14 +1,14 @@
 .DS_Store
 src/documents/*.pdf
 __pycache__
-src/models/funasr-fsmn-vad/*
-src/models/Llama-3.2-1B-Instruct/*
-src/models/sentence-transformers/all-mpnet-base-v2/*
-src/models/MIT-ast-finetuned-speech-commands-v2/*
-src/models/whisper-base/*
-src/models/SpeechT5/*
-src/models/SpeechT5HiFiGAN/*
-src/vectorstore/database/*
+*.json
+*.safetensors
+*.npz
+*.pt
+*.model
+*.txt
+*.bin
+
 
 
 
