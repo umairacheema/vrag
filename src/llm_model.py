@@ -74,7 +74,7 @@ class VRAGLLMModel:
         self.vectordb = Chroma(persist_directory=self.config['vs_output_folder'], embedding_function=self.embeddings)
 
      
-    def generate_response(self, user_query):
+    def generate_rag_response(self, user_query):
         
         #Find similar documents
         retrieved_docs = self.vectordb.similarity_search(user_query, k=self.rag_retriever_documents)
@@ -94,6 +94,40 @@ class VRAGLLMModel:
         messages = [
         {"role": "system", "content": self.system_prompt},
         {"role": "user", "content": prompt},
+         ]
+        
+
+        input_ids = self.tokenizer.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            return_tensors="pt"
+        ).to(self.model.device)
+
+        self.terminators = [
+            self.tokenizer.eos_token_id,
+            self.tokenizer.convert_tokens_to_ids("<|eot_id|>")
+        ]
+
+        outputs = self.model.generate(
+            input_ids,
+            max_new_tokens=self.rag_max_new_tokens,
+            eos_token_id=self.terminators,
+            do_sample=self.rag_do_sample,
+            temperature=self.rag_temperature,
+            top_p= self.rag_top_p,
+            top_k = self.rag_top_k
+
+        )
+        
+        response = outputs[0][input_ids.shape[-1]:]
+        return self.tokenizer.decode(response, skip_special_tokens=True)
+
+
+    def generate_response(self, user_query):
+        
+        messages = [
+        {"role": "system", "content": self.system_prompt},
+        {"role": "user", "content": user_query},
          ]
         
 

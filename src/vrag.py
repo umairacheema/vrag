@@ -1,15 +1,30 @@
 
 import time
 import streamlit as st
+from threading import Thread
 from llm_model import VRAGLLMModel
 from ww_model import WakeWordClassifier
 from asr_model import AutomaticSpeechRecognition
 from tts_model import TextToSpeechModel
+from vragconfig import VRAGConfig
 
+
+#Read configuration file
+config = VRAGConfig(file_path='./vrag.yaml').read()
 #Set the application title
 st.title(":blue[_Voice_] RAG :sound:")
 
-st.sidebar.markdown("* Loading Llama 3.2 model")
+st.sidebar.title(":blue[_Voice_] RAG :sound:")
+mode = st.sidebar.radio(
+    "Select Knowledge Source",
+    ["RAG",config['llm_name']],
+    captions=[
+        "Knowledge from vectorstore",
+        "Internal knowledge of the model"
+    ],
+)
+
+st.sidebar.markdown("* Loading "+config['llm_name']+" model")
 
 #Initialize the large language model
 if "vrag_model" not in st.session_state:
@@ -17,7 +32,7 @@ if "vrag_model" not in st.session_state:
     vrag_model.load_model()
     st.session_state["vrag_model"] = vrag_model
 
-st.sidebar.markdown("* Llama loaded")
+st.sidebar.markdown("* "+config['llm_name']+" loaded")
 
 st.sidebar.markdown("* Loading ASR model")
 #Initialize the automatic speech recognition model
@@ -40,7 +55,10 @@ st.sidebar.markdown("* TTS model is loaded")
 # Streamed response emulator
 def response_generator(query):
     llm = st.session_state["vrag_model"]
-    response = llm.generate_response(query)
+    if mode == "RAG":
+        response = llm.generate_rag_response(query)
+    else:
+        response = llm.generate_response(query)
     for word in response.split():
         yield word + " "
         time.sleep(0.05)
@@ -80,7 +98,7 @@ def transcribe_speech():
     prompt = st.session_state.asr_model.convert_speech_to_text(out=True)
     return prompt
 
-def get_rag_response(prompt):
+def get_llm_response(prompt):
      # Display assistant response in chat message container
     with st.chat_message("assistant"):
         response = st.write_stream(response_generator(prompt))
@@ -104,12 +122,12 @@ def run_rag():
         # Display user message in chat  container
         with st.chat_message("user"):
             st.markdown(prompt)
-        
-        response = get_rag_response(prompt)
+        response = get_llm_response(prompt)
         st.session_state.messages.append({"role": "assistant", "content": response})
         text_to_speech(response)
     st.session_state['running_vrag'] = False
     time.sleep(1)
+    run_rag()
     return
 
 #Initialize the wake word classifier
@@ -118,11 +136,9 @@ if "ww_model" not in st.session_state:
     ww_model.load_wakeword_classifier()
     st.session_state["ww_model"] = ww_model
     st.sidebar.markdown("* Wake word detection model loaded")
-    
 
-while True:
-    if "running_vrag" not in st.session_state or st.session_state.running_vrag == False:
-        run_rag()
+if "running_vrag" not in st.session_state or st.session_state.running_vrag == False:
+    run_rag()
 
 
 
