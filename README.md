@@ -1,4 +1,4 @@
-# VRAG (Voice based Retrieval Augmented Generation)
+# VRAG (Offline Voice based Retrieval Augmented Generation)
 ![VRAG User Interface](VRAG-WebUI.jpg)
 
 This python web app uses Retrieval Augmented Generation pattern to allow users to query their documents using a voice interface. Users can also select LLM's internal knowledge mode to ask questions without providing additional documentation/context.
